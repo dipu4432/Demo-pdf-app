@@ -3,7 +3,6 @@ import { Document, Page } from "react-pdf";
 
 const PDFViewer = () => {
   const [numPages, setNumPages] = useState<number>(0);
-  const [pageNumber, setPageNumber] = useState<number>(1);
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
     setNumPages(numPages);
@@ -17,30 +16,15 @@ const PDFViewer = () => {
         file="/pdfs/iesc112.pdf"
         onLoadSuccess={onDocumentLoadSuccess}
       >
-        <Page
-          pageNumber={pageNumber}
-          renderTextLayer={false}
-          renderAnnotationLayer={false}
-        />
+        {Array.from(new Array(numPages), (_, index) => (
+          <Page
+            key={`page_${index + 1}`}
+            pageNumber={index + 1}
+            renderTextLayer={false}
+            renderAnnotationLayer={false}
+          />
+        ))}
       </Document>
-
-      <p>
-        Page {pageNumber} of {numPages}
-      </p>
-
-      <button
-        disabled={pageNumber <= 1}
-        onClick={() => setPageNumber(pageNumber - 1)}
-      >
-        Previous
-      </button>
-
-      <button
-        disabled={pageNumber >= numPages}
-        onClick={() => setPageNumber(pageNumber + 1)}
-      >
-        Next
-      </button>
     </div>
   );
 };
